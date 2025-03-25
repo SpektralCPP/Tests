@@ -296,6 +296,7 @@ template <typename output_t, typename... inputs_t> struct test_group {
  * program will terminate with an error message.
  */
 template <typename output_t, typename... inputs_t>
+[[nodiscard("Capture the return unless you are immediately calling .run()")]]
 constexpr test_group<output_t, inputs_t...>
 add_test_group(std::string name,
                std::function<output_t(std::tuple<inputs_t...>)> fn,
@@ -333,6 +334,7 @@ add_test_group(std::string name,
  * @return A `test_group` object containing the provided test data.
  */
 template <typename output_t, typename... inputs_t>
+[[nodiscard("Capture the return unless you are immediately calling .run()")]]
 constexpr test_group<output_t, inputs_t...>
 add_test_group(std::string name, output_t (*fn)(std::tuple<inputs_t...>),
                std::vector<std::tuple<inputs_t...>> inputs,
