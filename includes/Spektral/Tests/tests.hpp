@@ -1,6 +1,8 @@
-/// @file Spektral/Tests/tests.hpp
-///
-/// @brief A quick testing framework for small C++ projects
+/**
+ * @file Spektral/Tests/tests.hpp
+ * @brief A quick testing framework for small C++ projects
+ */
+
 #pragma once
 #include <format>
 #include <functional>
