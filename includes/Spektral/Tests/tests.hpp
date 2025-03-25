@@ -346,13 +346,31 @@ add_test_group(std::string name, output_t (*fn)(std::tuple<inputs_t...>),
  * @tparam output_t the output type
  * @tparam ...inputs_t variadic parameter pack of outputs
  *
- * @param fn Any function
+ * @param fn Any std::function
  *
  * @return A function that accepts a tuple of arguments rather than arguments
  */
 template <typename output_t, typename... inputs_t>
 constexpr std::function<output_t(std::tuple<inputs_t...>)>
 make_testable_fn(std::function<output_t(inputs_t...)> fn) {
+  return [&fn](std::tuple<inputs_t...> args) -> output_t {
+    return std::apply(fn, args);
+  };
+}
+
+/**
+ * @brief Convert any function to a function that can accept tuple
+ *
+ * @tparam output_t the output type
+ * @tparam ...inputs_t variadic parameter pack of outputs
+ *
+ * @param fn Any std::function
+ *
+ * @return A function that accepts a tuple of arguments rather than arguments
+ */
+template <typename output_t, typename... inputs_t>
+constexpr std::function<output_t(std::tuple<inputs_t...>)>
+make_testable_fn(output_t (*fn)(inputs_t...)) {
   return [&fn](std::tuple<inputs_t...> args) -> output_t {
     return std::apply(fn, args);
   };
