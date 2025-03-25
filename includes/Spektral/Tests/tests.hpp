@@ -359,7 +359,7 @@ make_testable_fn(std::function<output_t(inputs_t...)> fn) {
 }
 
 /**
- * @brief Convert any function to a function that can accept tuple
+ * @brief Convert any function pointer to a function that can accept tuple
  *
  * @tparam output_t the output type
  * @tparam ...inputs_t variadic parameter pack of outputs
