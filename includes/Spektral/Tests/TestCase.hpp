@@ -10,8 +10,9 @@
 
 #pragma once
 
+static_assert(__cplusplus >= 202002L, "C++20 is required for Spektral::Tests");
+
 #include <cstdlib>
-#include <format>
 #include <fstream>
 #include <functional>
 #include <iostream>
@@ -23,9 +24,11 @@ namespace Spektral::Tests {
  * @brief Enumeration for specifying parameter options for a test case.
  */
 enum class param_option : unsigned char {
-  /** @brief Indicates that a test case failure is optional and will not terminate the test run. */
+  /** @brief Indicates that a test case failure is optional and will not
+     terminate the test run. */
   OPTIONAL = 0x0,
-  /** @brief Indicates that a test case failure is not optional and will critically fail the test run. */
+  /** @brief Indicates that a test case failure is not optional and will
+     critically fail the test run. */
   NOT_OPTIONAL = 0x1,
 };
 
@@ -41,7 +44,8 @@ enum class param_option : unsigned char {
 template <typename output_t, typename... input_ts> class TestCase {
 public:
   /**
-   * @brief Deleted default constructor to prevent accidental instantiation without parameters.
+   * @brief Deleted default constructor to prevent accidental instantiation
+   * without parameters.
    */
   TestCase() = delete;
 
@@ -64,10 +68,13 @@ public:
    *
    * @param fn The function to be tested. It should accept the `input_ts`
    * as arguments and return a value of type `output_t`.
-   * @param tc_number The sequential number of this test case for reporting purposes.
+   * @param tc_number The sequential number of this test case for reporting
+   * purposes.
    * @param tty A reference to an output file stream (e.g., for logging).
-   * @param suppress If true, suppresses the "passed" message for successful tests.
-   * @return True if the test case passed, false otherwise (only for optional failures).
+   * @param suppress If true, suppresses the "passed" message for successful
+   * tests.
+   * @return True if the test case passed, false otherwise (only for optional
+   * failures).
    *
    * @remark If the test case is marked as not optional and the assertion fails,
    * the program will terminate with `EXIT_FAILURE`.
@@ -77,30 +84,27 @@ public:
     output_t found = std::apply(fn, inputs);
     if (found == expected) {
       if (!suppress) {
-        std::print(tty, "\033[32m");
-        std::println(std::cout, "Test Case # {} passed.", tc_number);
-        std::print(tty, "\033[0m");
+        tty << "\033[32m";
+        std::cout << "Test Case # {} passed." << std::endl;
+        tty << "\033[0m";
       }
       return true;
     }
     if (is_optional()) {
       if (!suppress) {
         tty << "\033[31m";
-        std::cout << std::format(
-                             "Test Case # {} failed. Expected: {} but Found: {}",
-                             tc_number, expected, found)
-                  << std::endl;
+        std::cout << "Test Case # " << tc_number
+                  << " failed. Expected: " << expected
+                  << " but found: " << found << std::endl;
         tty << "\033[0m";
       }
       return false;
     }
     // this should be unsuppressable imo
     tty << "\033[31m";
-    std::cout
-        << std::format(
-                "Test Case # {} critically failed. Expected: {} but Found: {}",
-                tc_number, expected, found)
-        << std::endl;
+    std::cout << "Test Case # " << tc_number
+              << " critically failed. Expected: " << expected << " but found: " << found
+              << std::endl;
     tty << "\033[0m";
     exit(EXIT_FAILURE);
   }

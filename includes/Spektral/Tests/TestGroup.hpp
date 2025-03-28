@@ -10,6 +10,9 @@
  */
 
 #pragma once
+
+static_assert(__cplusplus >= 202002L, "C++20 is required for Spektral::Tests");
+
 #include "TestCase.hpp"
 #include <vector>
 
@@ -33,7 +36,8 @@ public:
   virtual void run() = 0;
 
   /**
-   * @brief Virtual destructor to ensure proper cleanup of derived class resources.
+   * @brief Virtual destructor to ensure proper cleanup of derived class
+   * resources.
    */
   virtual ~BaseTestGroup() = default;
 };
@@ -54,16 +58,20 @@ template <typename output_t, typename... input_ts>
 class AssertionGroup : public BaseTestGroup {
 public:
   /**
-   * @brief Constructs an AssertionGroup object with a name and a function object.
+   * @brief Constructs an AssertionGroup object with a name and a function
+   * object.
    *
    * @param name The name of this test group, used for reporting.
-   * @param function A `std::function` object representing the function to be tested.
+   * @param function A `std::function` object representing the function to be
+   * tested.
    */
-  AssertionGroup(std::string name, std::function<output_t(input_ts...)> function)
+  AssertionGroup(std::string name,
+                 std::function<output_t(input_ts...)> function)
       : group_name(std::move(name)), fn(std::move(function)) {}
 
   /**
-   * @brief Constructs an AssertionGroup object with a name and a raw function pointer.
+   * @brief Constructs an AssertionGroup object with a name and a raw function
+   * pointer.
    *
    * @param name The name of this test group, used for reporting.
    * @param function A raw function pointer to the function to be tested.
@@ -86,12 +94,11 @@ public:
    */
   void run() override {
     bool suppress = cases.size() >= 50;
-    std::println(std::cout, "Running tests for test group: {}.", group_name);
+    std::cout << "Running tests for test group: " << group_name << "."
+              << std::endl;
     if (suppress) {
-      std::println(
-          std::cout,
-          "Large number of test cases found: {}, output will be suppressed.",
-          cases.size());
+      std::cout << "Large number of test cases found: " << cases.size() << "."
+                << std::endl;
     }
     std::ofstream tty{"/dev/tty"};
     tty << std::unitbuf;
@@ -104,16 +111,16 @@ public:
       tc_number++;
     }
     if (!failing_cases.empty()) {
-      std::print(std::cout, "The following cases failed: ");
+      std::cout << "The following cases failed: ";
       for (const auto &c : failing_cases) {
-        std::print(std::cout, "{}, ", c);
+        std::cout << c << ", ";
       }
       std::cout << std::endl;
       std::cout << (cases.size() - failing_cases.size()) << " out of "
                 << cases.size() << " passed." << std::endl;
       return;
     }
-    std::println(std::cout, "All {} cases passed.", cases.size());
+    std::cout << "All " << cases.size() << " cases passed." << std::endl;
   }
 
   /**

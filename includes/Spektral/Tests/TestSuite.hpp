@@ -9,6 +9,9 @@
  */
 
 #pragma once
+
+static_assert(__cplusplus >= 202002L, "C++20 is required for Spektral::Tests");
+
 #include "TestGroup.hpp"
 #include <algorithm>
 #include <iostream>
@@ -105,7 +108,7 @@ public:
    * It prints the name of the test suite before running the groups.
    */
   void run() {
-    std::println(std::cout, "Running tests in test suite: {}", name);
+    std::cout << "Running tests in test suit: " << name << std::endl;
     std::for_each(groups.begin(), groups.end(),
                   [](auto &group) { group->run(); });
   }
