@@ -1,15 +1,6 @@
-all: install
+all:
 
-install: /usr/include/Spektral/Tests/tests.hpp
-
-/usr/include/Spektral/Tests/colors.hpp\
-/usr/include/Spektral/Tests/test_group.hpp\
-/usr/include/Spektral/Tests/test_suite.hpp\
-/usr/include/Spektral/Tests/tests.hpp /usr/include/Spektral/Tests/utils.hpp:\
-	includes/Spektral/Tests/colors.hpp\
-	includes/Spektral/Tests/test_group.hpp\
-	includes/Spektral/Tests/test_suite.hpp includes/Spektral/Tests/tests.hpp\
-	includes/Spektral/Tests/utils.hpp
+install: includes/Spektral/Tests/TestGroup.hpp includes/Spektral/Tests/TestSuite.hpp includes/Spektral/Tests/TestCase.hpp
 	@echo "Installing header at /usr/include/Spektral/Tests/"
 	@sudo mkdir -p /usr/include/Spektral/Tests/
 	@sudo cp $^ /usr/include/Spektral/Tests/
